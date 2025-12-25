@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<meta charset='UTF-8' />
+<meta content='width=device-width, initial-scale=1, user-scalable=1, minimum-scale=1, maximum-scale=5' name='viewport' />
+<meta content='IE=edge' http-equiv='X-UA-Compatible' />
+
+<head>
+  <title>Spesial buat Sayank Q</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.all.min.js"></script>
+  
+  <style>
+    :root {
+      --gaya-font: 'Josefin Sans', sans-serif;
+    }
+    body {
+      font-family: var(--gaya-font);
+      padding: 0; margin: 0;
+      overflow: hidden; /* Hilangkan scroll */
+      display: flex; justify-content: center; align-items: center;
+      height: 100vh;
+    }
+
+    /* BACKGROUND FULL SCREEN */
+    #bodyblur {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -1; background: #000;
+    }
+    #bodyblur img {
+      width: 100%; height: 100%; object-fit: cover; opacity: 0.6;
+    }
+
+    /* TOMBOL SURAT (START) */
+    #suratin {
+      display: flex; justify-content: center; align-items: center;
+      width: 100px; height: 100px; cursor: pointer;
+      animation: kdp 1s infinite alternate;
+      transition: all 1s ease;
+      z-index: 10;
+    }
+    #suratin img { width: 100%; }
+    @keyframes kdp { 0% { transform: scale(.9); } 100% { transform: scale(1.1); } }
+
+    /* KONTAINER UTAMA (Script 2) */
+    #Content {
+      display: none; /* Disembunyikan dulu */
+      position: relative;
+      z-index: 5;
+      text-align: center;
+    }
+
+    #bq {
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+      border: 2px solid white;
+      border-radius: 20px;
+      padding: 25px;
+      color: white;
+      box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+      max-width: 320px;
+      margin: auto;
+    }
+
+    #fotoakhir { width: 120px; height: 120px; object-fit: cover; border-radius: 50%; margin-bottom: 15px; }
+
+    /* TEXT STYLE */
+    p { margin: 10px 0; font-size: 16px; line-height: 1.5; }
+    .fontalt { font-weight: bold; }
+    .merah { color: #ff4d4d; }
+
+    /* TOMBOL INTERAKTIF */
+    #Tombol { margin-top: 20px; display: flex; justify-content: center; gap: 10px; }
+    .btn-action {
+      background: white; color: black; font-weight: bold;
+      padding: 10px 25px; border-radius: 50px; cursor: pointer;
+      transition: transform 0.2s; text-decoration: none;
+    }
+    #Bn { background: #ff4d4d; color: white; } /* Tombol Gak */
+    
+    /* Timer Prank */
+    #ctimer { font-size: 28px; font-weight: bold; color: yellow; }
+  </style>
+</head>
+
+<body>
+
+  <audio id="linkmp3" src="https://audio.jukehost.co.uk/5VfcVfr1D3fIU8m27X85m5HVkPyRIhQr" loop></audio>
+
+  <div id="bodyblur">
+    <img src="https://i.postimg.cc/d1sQ9SCZ/3435639908-97332147469794-1765728699151.png" alt="Wallpaper">
+  </div>
+
+  <div id="suratin" onClick="mulaiScript()">
+    <img src="https://rayyscoding.github.io/envelope.png" />
+  </div>
+
+  <div style="display:none">
+    <img src="https://feeldreams.github.io/pusn2.gif" id="stiker1">
+    <img src="https://feeldreams.github.io/pandahiya.gif" id="stiker2">
+    <img src="https://feeldreams.github.io/mikir.gif" id="stiker3">
+    <img src="https://feeldreams.github.io/pandapanah.gif" id="gif_tanya">
+    <img src="https://feeldreams.github.io/weee.gif" id="gif_prank">
+    <img src="https://htmlku.com/0/panda/muah.gif" id="gif_love">
+  </div>
+
+  <div id="Content">
+    <div id="bq">
+      <img src="https://feeldreams.github.io/pandapanah.gif" id="fotoakhir" />
+      
+      <div id="pertanyaan">
+        <p id="kalimat">Jadi, gimana jawabannya? 🤭❤️</p>
+      </div>
+
+      <div id="prankArea" style="display:none">
+        <p>Tapi kita akan <b>PUTUS</b><br>dalam waktu:</p>
+        <p id="ctimer">5</p>
+      </div>
+      
+      <div id="endingArea" style="display:none">
+        <p><b>Gak jadi deh! 😜<br>Love U Seduniaaa 🩷</b></p>
+      </div>
+
+      <div id="Tombol">
+        <a class="btn-action" onClick="diterima()">Mau</a>
+        <a class="btn-action" id="Bn" onMouseOver="bwe()" onClick="bwe()">Gamau</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const audio = document.getElementById('linkmp3');
+    const suratin = document.getElementById('suratin');
+    const content = document.getElementById('Content');
+    const bq = document.getElementById('bq');
+    const fotoAkhir = document.getElementById('fotoakhir');
+    const bn = document.getElementById('Bn');
+
+    // CONFIG WHATSAPP
+    const nomorWA = "628987334430"; // GANTI NOMOR KAMU DISINI
+    const pesanWA = "Iyaa bub aku mau kok jadi pacar kamu, ayoo jadi serius ><";
+
+    // Fungsi Mulai (Klik Surat)
+    async function mulaiScript() {
+      audio.play();
+      suratin.style.display = "none"; 
+      
+      // Masuk ke intro pesan-pesan cinta
+      await swalIntro();
+    }
+
+    async function swalIntro() {
+      const swalst = Swal.mixin({
+        allowOutsideClick: false,
+        showConfirmButton: true,
+        confirmButtonText: 'Lanjut',
+        confirmButtonColor: '#4682B4',
+      });
+
+      // 1. Pesan Awal
+      await swalst.fire({
+        title: 'Alooo Haya Sayangku Cintaku Duniakuu 😋',
+        imageUrl: document.getElementById('stiker1').src,
+        imageHeight: 120,
+      });
+
+      // 2. Pesan Persiapan
+      await swalst.fire({
+        title: 'Aku akhirnya siap buat nyatain perasaan aku 🫣',
+        imageUrl: document.getElementById('stiker2').src,
+        imageHeight: 120,
+      });
+
+      // 3. Pesan Serius
+      await swalst.fire({
+        title: 'Aku sayangg banget sama kamu. aku juga mikir ini udah waktunya kita punya status beneran 🤔',
+        imageUrl: document.getElementById('stiker3').src,
+        imageHeight: 120,
+      });
+
+      // 4. TEKS PANJANG (The Bridge)
+      // Ini adalah teks request kamu
+      await swalst.fire({
+        html: "<b>Kamu mau gaa jadi <b style='color:#ff4d4d'>pacar</b> aku?<br><br>Aku beneran sayang sama kamu, aku gamau jadi bodoh yang terus terlalu nyaman tanpa status yang bisa bikin kamu gak nyaman dan bingung sama status kita.<br><br>Aku mau jadi pacar kamu yang punya status dan resmi, aku mau lebih serius sama kamu. 🫠💐</b>",
+        imageUrl: document.getElementById('stiker1').src,
+        imageHeight: 120,
+        confirmButtonText: 'Jawab Disini Sayang ❤️'
+      });
+
+      // Setelah klik "Jawab Sekarang", masuk ke Script 2
+      munculkanScript2();
+    }
+
+    function munculkanScript2() {
+      content.style.display = "block"; // Munculin kotak tombol
+      bq.style.animation = "kdp .7s ease"; // Efek pop-up
+    }
+
+    // Fungsi Tombol Lari (Gamau)
+    function bwe() {
+      var x = Math.random() * (window.innerWidth - 100);
+      var y = Math.random() * (window.innerHeight - 100);
+      bn.style.position = "fixed";
+      bn.style.left = x + "px";
+      bn.style.top = y + "px";
+    }
+
+    // Fungsi Diterima (Mau) -> Masuk Prank
+    function diterima() {
+      document.getElementById('Tombol').style.display = "none"; // Hilangkan tombol
+      document.getElementById('pertanyaan').style.display = "none"; // Hilangkan tanya
+      
+      fotoAkhir.src = document.getElementById('gif_prank').src; // Ganti stiker
+      document.getElementById('prankArea').style.display = "block"; // Muncul teks prank
+      
+      startTimer();
+    }
+
+    // Timer Hitung Mundur
+    function startTimer() {
+      var timeleft = 5;
+      var downloadTimer = setInterval(function(){
+        timeleft--;
+        document.getElementById("ctimer").textContent = timeleft;
+        if(timeleft <= 0){
+          clearInterval(downloadTimer);
+          endingLove();
+        }
+      }, 1000);
+    }
+
+    // Ending Asli
+    function endingLove() {
+      document.getElementById('prankArea').style.display = "none";
+      fotoAkhir.src = document.getElementById('gif_love').src;
+      document.getElementById('endingArea').style.display = "block";
+      
+      // SweetAlert Redirect WA
+      setTimeout(() => {
+        Swal.fire({
+            title: 'Chat ke WA aku yaa bub! 😆',
+            text: 'Love U Seduniaaa 🩷',
+            icon: 'success',
+            confirmButtonColor: '#25D366',
+            confirmButtonText: 'Kirim WhatsApp'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location = "https://api.whatsapp.com/send?phone=" + nomorWA + "&text=" + pesanWA;
+            }
+        });
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
